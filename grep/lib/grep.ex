@@ -1,7 +1,8 @@
 defmodule Grep do
   @spec grep(String.t(), [String.t()], [String.t()]) :: String.t()
-  def grep(pattern, flags, [_ | [] ] = file), do: do_grep(pattern, flags, file)
+  def grep(pattern, flags, [_ | []] = file), do: do_grep(pattern, flags, file)
   def grep(pattern, flags, files), do: do_grep(pattern, flags ++ ["-m"], files)
+
   def do_grep(pattern, flags, files) do
     files
     |> read_files()
@@ -10,7 +11,6 @@ defmodule Grep do
     |> Enum.uniq()
     |> List.to_string()
   end
-
 
   defp read_files(files) do
     for f <- files, {s, i} <- File.stream!(f) |> Stream.with_index() |> Enum.to_list() do
